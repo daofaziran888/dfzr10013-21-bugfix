@@ -15,6 +15,7 @@ from app.routers import hr as router_hr
 from app.routers import forecast as router_forecast
 from app.routers import alert as router_alert
 from app.routers import decision as router_decision
+from app.routers import scheme_analysis as router_scheme_analysis
 from app.routers import drill as router_drill
 from app.routers import report as router_report
 from app.routers import compare as router_compare
@@ -23,4 +24,4 @@ from app.routers import cache as router_cache
 from app.routers import template as router_template
 from app.routers import refresh as router_refresh
 
-ROUTERS = [router_kpi, router_finance, router_sales, router_customer, router_supply, router_hr, router_forecast, router_alert, router_decision, router_drill, router_report, router_compare, router_datasource, router_cache, router_template, router_refresh]
+ROUTERS = [router_kpi, router_finance, router_sales, router_customer, router_supply, router_hr, router_forecast, router_alert, router_decision, router_scheme_analysis, router_drill, router_report, router_compare, router_datasource, router_cache, router_template, router_refresh]

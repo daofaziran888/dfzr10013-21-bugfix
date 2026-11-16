@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException, Query
 
 from app.schemas import ActionResult, EntryPayload, PageResult
 from app.services.report import ReportService
+from app.services.scheme_run import scheme_run_service
 
 router = APIRouter(prefix="/api/report", tags=["经营分析报告"])
 
@@ -63,3 +64,19 @@ def export_entries() -> dict[str, Any]:
     """导出经营分析报告清单：返回当前过滤条件下的全量数据。"""
     items, total = service.list_entries(page=1, size=10000)
     return {"module": "report", "total": total, "items": items}
+
+
+@router.get("/scheme-datasets/{run_id}")
+def consume_scheme_dataset(run_id: str) -> dict[str, Any]:
+    """报告生成端跨模块消费方案对比结论数据集。
+
+    只取指定批次自身的情景覆盖、权重、转换依据、敏感区间与排序结论，
+    不会混入其他批次的排名；批次不存在时明确报错。
+    """
+    dataset = scheme_run_service.report_dataset(run_id)
+    if dataset is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"方案分析批次 {run_id} 不存在，报告无法引用该批次的方案结论",
+        )
+    return {"module": "report", "source_module": "decision", "dataset": dataset}

@@ -10,6 +10,7 @@ const Hr = () => import('@/views/hr/index.vue')
 const Forecast = () => import('@/views/forecast/index.vue')
 const Alert = () => import('@/views/alert/index.vue')
 const Decision = () => import('@/views/decision/index.vue')
+const SchemeAnalysis = () => import('@/views/decision/SchemeAnalysis.vue')
 const Drill = () => import('@/views/drill/index.vue')
 const Report = () => import('@/views/report/index.vue')
 const Compare = () => import('@/views/compare/index.vue')
@@ -31,6 +32,7 @@ const router = createRouter({
     { path: '/forecast', name: 'forecast', component: Forecast },
     { path: '/alert', name: 'alert', component: Alert },
     { path: '/decision', name: 'decision', component: Decision },
+    { path: '/decision/scheme-analysis', name: 'scheme-analysis', component: SchemeAnalysis },
     { path: '/drill', name: 'drill', component: Drill },
     { path: '/report', name: 'report', component: Report },
     { path: '/compare', name: 'compare', component: Compare },

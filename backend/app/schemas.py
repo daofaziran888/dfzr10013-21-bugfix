@@ -28,6 +28,58 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class SchemeOption(BaseModel):
+    """方案分析中的决策选项。"""
+
+    option_id: str
+    name: str
+
+
+class ScenarioRow(BaseModel):
+    """单个选项的单条情景数据；status=missing 表示尚无可靠估计，单独留痕而非按零处理。"""
+
+    option_id: str
+    scenario: str  # pessimistic / neutral / optimistic，也接受 悲观/中性/乐观
+    probability: float | None = None
+    benefit: float | None = None
+    cost: float | None = None
+    currency: str | None = None
+    period: float | None = None
+    period_unit: str | None = None  # month / quarter / year，也接受 月/季度/年
+    status: str = "estimated"  # estimated | missing
+
+
+class RiskRow(BaseModel):
+    """单个选项的单条风险量度；同一 correlation_group 内视为相关风险，合并时不重复计入。"""
+
+    option_id: str
+    metric: str
+    value: float | None = None
+    measure: str = "score"  # probability | score | amount
+    currency: str | None = None
+    correlation_group: str | None = None
+    status: str = "estimated"
+
+
+class SchemeAnalysisPayload(BaseModel):
+    """发起一次方案分析的完整输入；情景与风险都允许缺项，但缺项必须显式登记。"""
+
+    subject: str
+    base_currency: str = "CNY"
+    base_period_unit: str = "month"
+    currency_rates: dict[str, float] = Field(default_factory=dict)
+    weights: dict[str, float] | None = None
+    options: list[SchemeOption]
+    scenarios: list[ScenarioRow] = Field(default_factory=list)
+    risks: list[RiskRow] = Field(default_factory=list)
+
+
+class ReweightPayload(BaseModel):
+    """在同一批次输入上调整有明确含义的维度权重，生成派生批次，不改写原批次。"""
+
+    weights: dict[str, float]
+
+
 
 class KpiEntry(BaseModel):
     """经营指标明细结构。"""
